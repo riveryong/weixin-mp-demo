@@ -1,28 +1,29 @@
 package com.github.binarywang.demo.spring.handler;
 
-import java.util.Map;
-
 import com.github.binarywang.demo.spring.builder.TextBuilder;
-
-import me.chanjar.weixin.common.api.WxConsts;
-import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
-import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+import static me.chanjar.weixin.common.api.WxConsts.XmlMsgType;
 
 /**
  * 
  * @author Binary Wang
  *
  */
-public abstract class LocationHandler extends AbstractHandler {
+@Component
+public class LocationHandler extends AbstractHandler {
 
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
             Map<String, Object> context, WxMpService wxMpService,
-            WxSessionManager sessionManager) throws WxErrorException {
-        if (wxMessage.getMsgType().equals(WxConsts.XML_MSG_LOCATION)) {
+            WxSessionManager sessionManager) {
+        if (wxMessage.getMsgType().equals(XmlMsgType.LOCATION)) {
             //TODO 接收处理用户发送的地理位置消息
             try {
                 String content = "感谢反馈，您的的地理位置已收到！";

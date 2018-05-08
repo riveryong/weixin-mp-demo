@@ -1,33 +1,37 @@
 package com.github.binarywang.demo.spring.handler;
 
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
 import com.github.binarywang.demo.spring.builder.TextBuilder;
-import com.github.binarywang.demo.spring.service.BaseWxService;
+import com.github.binarywang.demo.spring.service.WeixinService;
+
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
-import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
-
-import java.util.Map;
 
 /**
  * 
  * @author Binary Wang
  *
  */
-public abstract class SubscribeHandler extends AbstractHandler {
+@Component
+public class SubscribeHandler extends AbstractHandler {
 
   @Override
   public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService,
       WxSessionManager sessionManager) throws WxErrorException {
 
-    this.logger.info("新关注用户 OPENID: " + wxMessage.getFromUserName());
+    this.logger.info("新关注用户 OPENID: " + wxMessage.getFromUser());
 
-    BaseWxService weixinService = (BaseWxService) wxMpService;
+    WeixinService weixinService = (WeixinService) wxMpService;
 
     // 获取微信用户基本信息
-    WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUserName(), null);
+    WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);
 
     if (userWxInfo != null) {
       // TODO 可以添加关注用户到本地
@@ -56,6 +60,9 @@ public abstract class SubscribeHandler extends AbstractHandler {
   /**
    * 处理特殊请求，比如如果是扫码进来的，可以做相应处理
    */
-  protected abstract WxMpXmlOutMessage handleSpecial(WxMpXmlMessage wxMessage) throws Exception;
+  protected WxMpXmlOutMessage handleSpecial(WxMpXmlMessage wxMessage) throws Exception {
+    //TODO
+    return null;
+  }
 
 }
